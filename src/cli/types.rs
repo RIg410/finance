@@ -10,6 +10,10 @@ pub enum TypesCommand {
     Add { name: String, description: String },
     /// Remove asset type
     Remove { id: String },
+    /// Apply asset type to asset
+    Apply { asset: String, asset_type: String },
+    /// Remove asset type from asset
+    RemoveFrom { asset: String, asset_type: String },
 }
 
 impl TypesCommand {
@@ -30,6 +34,16 @@ impl TypesCommand {
             }
             TypesCommand::Remove { id } => {
                 service.remove_type(id).await?;
+                println!("Type removed");
+                Ok(())
+            }
+            TypesCommand::Apply { asset, asset_type } => {
+                service.add_asset_type(asset, asset_type).await?;
+                println!("Type applied");
+                Ok(())
+            }
+            TypesCommand::RemoveFrom { asset, asset_type } => {
+                service.remove_asset_type(asset, asset_type).await?;
                 println!("Type removed");
                 Ok(())
             }

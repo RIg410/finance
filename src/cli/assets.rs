@@ -6,6 +6,7 @@ use finance::service::FinanceService;
 pub enum AssetsCommand {
     /// List all assets
     List,
+    /// Add new asset
     Add {
         ticker: String,
         #[clap(short, long)]

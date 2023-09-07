@@ -6,7 +6,7 @@ use crate::service::decimal::Decimal;
 use crate::view::assets::AssetShortInfo;
 use crate::view::currency::CurrencyShortInfo;
 use crate::view::types::TypeView;
-use color_eyre::eyre::{Context, Error};
+use color_eyre::eyre::Error;
 use sqlx::{Pool, Sqlite};
 
 pub mod assets;
@@ -96,12 +96,47 @@ impl FinanceService {
         Ok(())
     }
 
+    pub async fn add_asset_type(&self, asset: String, tp: String) -> Result<(), Error> {
+        let asset = self
+            .assets
+            .get_asset_by_ticker(asset)
+            .await?
+            .ok_or(Error::msg("Asset not found"))?;
+        let tp = self
+            .assets
+            .get_type_by_name(tp)
+            .await?
+            .ok_or(Error::msg("Type not found"))?;
+        self.assets.add_asset_type(&asset, &tp).await?;
+        Ok(())
+    }
+
+    pub async fn remove_asset_type(&self, asset: String, tp: String) -> Result<(), Error> {
+        let asset = self
+            .assets
+            .get_asset_by_ticker(asset)
+            .await?
+            .ok_or(Error::msg("Asset not found"))?;
+        let tp = self
+            .assets
+            .get_type_by_name(tp)
+            .await?
+            .ok_or(Error::msg("Type not found"))?;
+        self.assets.remove_asset_type(&asset, &tp).await?;
+        Ok(())
+    }
+
     pub async fn get_assets(&self) -> Result<Vec<AssetShortInfo>, Error> {
         let assets = self.assets.get_assets().await?;
-        Ok(assets
-            .into_iter()
-            .map(|a| AssetShortInfo { ticker: a.ticker })
-            .collect())
+        let mut result = Vec::new();
+        for asset in assets {
+            let types = self.assets.get_asset_types(&asset).await?;
+            result.push(AssetShortInfo {
+                ticker: asset.ticker,
+                tags: types.into_iter().map(|t| t.name).collect::<Vec<String>>(),
+            });
+        }
+        Ok(result)
     }
 
     pub async fn add_asset(

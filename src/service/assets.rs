@@ -35,6 +35,10 @@ impl AssetsService {
         self.dao.get_type_by_name(name).await
     }
 
+    pub async fn get_asset_by_ticker(&self, ticker: String) -> Result<Option<Asset>, Error> {
+        self.dao.get_asset_by_ticker(ticker).await
+    }
+
     pub async fn get_type(&self, id: i64) -> Result<Option<AssetType>, Error> {
         self.dao.get_type(id).await
     }
@@ -50,6 +54,10 @@ impl AssetsService {
         self.dao.get_assets().await
     }
 
+    pub async fn get_asset_types(&self, asset: &Asset) -> Result<Vec<AssetType>, Error> {
+        self.dao.get_asset_types(asset).await
+    }
+
     pub async fn add_asset(
         &self,
         ticker: String,
@@ -60,5 +68,13 @@ impl AssetsService {
         self.dao
             .add_asset(ticker, name, description, currency)
             .await
+    }
+
+    pub async fn add_asset_type(&self, asset: &Asset, tp: &AssetType) -> Result<(), Error> {
+        self.dao.add_asset_type(asset, tp).await
+    }
+
+    pub async fn remove_asset_type(&self, asset: &Asset, tp: &AssetType) -> Result<(), Error> {
+        self.dao.remove_asset_type(asset, tp).await
     }
 }

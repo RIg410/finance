@@ -75,6 +75,13 @@ impl AssetsDao {
         Ok(types)
     }
 
+    pub async fn get_asset_by_ticker(&self, ticker: String) -> Result<Option<Asset>, Error> {
+        let assets = sqlx::query_as!(Asset, "SELECT * FROM asset WHERE ticker = ?", ticker)
+            .fetch_optional(&self.pool)
+            .await?;
+        Ok(assets)
+    }
+
     pub async fn remove_type(&self, tp: &AssetType) -> Result<(), Error> {
         let id = tp.id;
         sqlx::query!("DELETE FROM asset_type WHERE id = ?", id)
@@ -88,6 +95,21 @@ impl AssetsDao {
             .fetch_all(&self.pool)
             .await?;
         Ok(assets)
+    }
+
+    pub async fn get_asset_types(&self, asset: &Asset) -> Result<Vec<AssetType>, Error> {
+        let id = asset.id;
+        let types = sqlx::query_as!(
+            AssetType,
+            "\
+        SELECT id, name, description FROM asset_type \
+        INNER JOIN asset_to_type ON asset_type.id = asset_to_type.type_id \
+        WHERE asset_to_type.asset_id = ?",
+            id
+        )
+        .fetch_all(&self.pool)
+        .await?;
+        Ok(types)
     }
 
     pub async fn add_asset(
@@ -115,5 +137,31 @@ impl AssetsDao {
             description,
             currency,
         })
+    }
+
+    pub async fn add_asset_type(&self, asset: &Asset, tp: &AssetType) -> Result<(), Error> {
+        let asset_id = asset.id;
+        let type_id = tp.id;
+        sqlx::query!(
+            "INSERT INTO asset_to_type (asset_id, type_id) VALUES (?, ?)",
+            asset_id,
+            type_id
+        )
+        .execute(&self.pool)
+        .await?;
+        Ok(())
+    }
+
+    pub async fn remove_asset_type(&self, asset: &Asset, tp: &AssetType) -> Result<(), Error> {
+        let asset_id = asset.id;
+        let type_id = tp.id;
+        sqlx::query!(
+            "DELETE FROM asset_to_type WHERE asset_id = ? AND type_id = ?",
+            asset_id,
+            type_id
+        )
+        .execute(&self.pool)
+        .await?;
+        Ok(())
     }
 }
