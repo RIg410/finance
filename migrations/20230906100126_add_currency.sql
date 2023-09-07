@@ -18,4 +18,4 @@ CREATE TABLE IF NOT EXISTS currency_rate
 INSERT INTO currency (ticker, name)
 VALUES ('usd', 'United States Dollar');
 INSERT INTO currency_rate (currency_id, rate, date)
-VALUES (1, 1, datetime('now'));
+VALUES (1, 100, datetime('now'));

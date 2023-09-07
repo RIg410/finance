@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT * FROM asset WHERE currency = ?",
+  "query": "SELECT * FROM asset_type WHERE name = ?",
   "describe": {
     "columns": [
       {
@@ -14,19 +14,9 @@
         "type_info": "Text"
       },
       {
-        "name": "ticker",
+        "name": "description",
         "ordinal": 2,
         "type_info": "Text"
-      },
-      {
-        "name": "description",
-        "ordinal": 3,
-        "type_info": "Text"
-      },
-      {
-        "name": "currency",
-        "ordinal": 4,
-        "type_info": "Int64"
       }
     ],
     "parameters": {
@@ -35,10 +25,8 @@
     "nullable": [
       false,
       false,
-      false,
-      false,
       false
     ]
   },
-  "hash": "bcd0c7a51d846f66581dbe82330dd0bbb639fc736880cb0d0955c8ef52f2559e"
+  "hash": "527d712f231cdbe8cd57ba5ae68a38ee082ade4586a1b4d129454c11dbd07fb1"
 }

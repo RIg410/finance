@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT * FROM asset WHERE currency = ?",
+  "query": "SELECT id, name, ticker, description, currency FROM asset INNER JOIN asset_to_type ON asset.id = asset_to_type.asset_id WHERE asset_to_type.type_id = ?",
   "describe": {
     "columns": [
       {
@@ -40,5 +40,5 @@
       false
     ]
   },
-  "hash": "bcd0c7a51d846f66581dbe82330dd0bbb639fc736880cb0d0955c8ef52f2559e"
+  "hash": "c1c6e434ed439c4398cba17e5c207fbd3e26383aecd687950faf92b5b2592283"
 }

@@ -27,9 +27,9 @@ impl CurrencyDao {
         Ok(currency)
     }
 
-    pub async fn find_by_ticker(&self, ticker: &String) -> Result<Currency, Error> {
+    pub async fn find_by_ticker(&self, ticker: &String) -> Result<Option<Currency>, Error> {
         let currency = sqlx::query_as!(Currency, "SELECT * FROM currency WHERE ticker = ?", ticker)
-            .fetch_one(&self.pool)
+            .fetch_optional(&self.pool)
             .await?;
         Ok(currency)
     }

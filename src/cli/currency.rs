@@ -74,6 +74,7 @@ impl CurrencyCommand {
                         Decimal::from_str(&rate_to_base)?,
                     )
                     .await?;
+                println!("Currency rate added");
             }
         }
         Ok(())

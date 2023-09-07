@@ -18,7 +18,11 @@ impl CurrencyService {
     }
 
     pub async fn currency_info(&self, ticker: &String) -> Result<CurrencyShortInfo, Error> {
-        let currency = self.dao.find_by_ticker(ticker).await?;
+        let currency = self
+            .dao
+            .find_by_ticker(ticker)
+            .await?
+            .ok_or(Error::msg("Currency not found"))?;
         let rate = self.dao.last_rate(currency.id).await?;
         Ok(CurrencyShortInfo {
             name: currency.name,
@@ -27,7 +31,7 @@ impl CurrencyService {
         })
     }
 
-    pub async fn currency(&self, ticker: &String) -> Result<Currency, Error> {
+    pub async fn currency(&self, ticker: &String) -> Result<Option<Currency>, Error> {
         Ok(self.dao.find_by_ticker(ticker).await?)
     }
 
