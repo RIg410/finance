@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM asset_to_type WHERE asset_id = ? AND type_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "cd881e228ce915f140e2ac6197512b1d1a8a3d9d096f3d8fb4bc29b70f2246ae"
+}

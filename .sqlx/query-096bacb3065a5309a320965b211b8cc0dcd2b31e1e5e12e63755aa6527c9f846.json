@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO asset_to_type (asset_id, type_id) VALUES (?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "096bacb3065a5309a320965b211b8cc0dcd2b31e1e5e12e63755aa6527c9f846"
+}
