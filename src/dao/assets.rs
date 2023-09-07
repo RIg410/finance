@@ -3,6 +3,7 @@ use crate::dao::model::currency::Currency;
 use color_eyre::eyre::Error;
 use sqlx::{Pool, Sqlite};
 
+#[derive(Clone)]
 pub struct AssetsDao {
     pool: Pool<Sqlite>,
 }
@@ -162,6 +163,14 @@ impl AssetsDao {
         )
         .execute(&self.pool)
         .await?;
+        Ok(())
+    }
+
+    pub async fn remove_asset(&self, asset: &Asset) -> Result<(), Error> {
+        let id = asset.id;
+        sqlx::query!("DELETE FROM asset WHERE id = ?", id)
+            .execute(&self.pool)
+            .await?;
         Ok(())
     }
 }

@@ -3,6 +3,7 @@ use crate::dao::currency::CurrencyDao;
 use crate::dao::model::assets::Asset;
 use crate::dao::model::currency::Currency;
 use crate::service::decimal::Decimal;
+use crate::service::operations::OperationService;
 use crate::view::assets::AssetShortInfo;
 use crate::view::currency::CurrencyShortInfo;
 use crate::view::types::TypeView;
@@ -12,10 +13,12 @@ use sqlx::{Pool, Sqlite};
 pub mod assets;
 pub mod currency;
 pub mod decimal;
+pub mod operations;
 
 pub struct FinanceService {
     pub currency: currency::CurrencyService,
     pub assets: assets::AssetsService,
+    pub operations: OperationService,
 }
 
 impl FinanceService {
@@ -23,6 +26,7 @@ impl FinanceService {
         Self {
             currency: currency::CurrencyService::new(CurrencyDao::new(pool.clone())),
             assets: assets::AssetsService::new(AssetsDao::new(pool)),
+            operations: OperationService::new(),
         }
     }
 
@@ -161,12 +165,7 @@ impl FinanceService {
     }
 
     pub async fn remove_asset(&self, ticker: String) -> Result<(), Error> {
-        let asset = self
-            .assets
-            .get_asset_by_ticker(ticker.clone())
-            .await?
-            .ok_or(Error::msg("Asset not found"))?;
-        self.assets.remove_asset(&asset).await?;
+        self.assets.remove_asset(ticker).await?;
         Ok(())
     }
 }

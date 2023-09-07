@@ -5,6 +5,8 @@ pub mod assets;
 pub mod currency;
 pub mod types;
 
+pub mod ops;
+
 use currency::CurrencyCommand;
 use finance::service::FinanceService;
 
@@ -21,6 +23,10 @@ pub enum Cli {
     #[command(subcommand)]
     /// Assets commands
     Assets(assets::AssetsCommand),
+
+    #[command(subcommand)]
+    /// Financial operations
+    Ops(ops::OpsCommand),
 }
 
 impl Cli {
@@ -29,6 +35,7 @@ impl Cli {
             Cli::Currency(currency) => currency.handle(service).await,
             Cli::Types(types) => types.handle(service).await,
             Cli::Assets(assets) => assets.handle(service).await,
+            Cli::Ops(ops) => ops.handle(service).await,
         }
     }
 }
