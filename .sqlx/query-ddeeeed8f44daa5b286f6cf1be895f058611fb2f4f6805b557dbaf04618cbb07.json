@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO asset_operations (asset_id, operation_type, operation_date, operation_amount, currency_rate) VALUES (?, ?, datetime('now'), ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 4
+    },
+    "nullable": []
+  },
+  "hash": "ddeeeed8f44daa5b286f6cf1be895f058611fb2f4f6805b557dbaf04618cbb07"
+}
