@@ -17,6 +17,25 @@ impl CurrencyService {
         Ok(self.dao.get(1).await?)
     }
 
+    pub async fn currency_info(&self, ticker: &String) -> Result<CurrencyShortInfo, Error> {
+        let currency = self.dao.find_by_ticker(ticker).await?;
+        let rate = self.dao.last_rate(currency.id).await?;
+        Ok(CurrencyShortInfo {
+            name: currency.name,
+            ticker: currency.ticker,
+            rate: rate.rate,
+        })
+    }
+
+    pub async fn currency(&self, ticker: &String) -> Result<Currency, Error> {
+        Ok(self.dao.find_by_ticker(ticker).await?)
+    }
+
+    pub async fn drop(&self, currency: &Currency) -> Result<(), Error> {
+        self.dao.drop(currency).await?;
+        Ok(())
+    }
+
     pub async fn currency_info_list(&self) -> Result<Vec<CurrencyShortInfo>, Error> {
         let currencies = self.dao.list().await?;
         let mut result = Vec::new();

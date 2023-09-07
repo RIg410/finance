@@ -9,10 +9,10 @@ pub struct CurrencyShortInfo {
 
 impl Display for CurrencyShortInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}: {} = {}",
-            self.name, self.ticker, self.rate
-        )
+        if self.name == self.ticker {
+            return write!(f, "{} = {}", self.name, self.rate);
+        } else {
+            write!(f, "{}({}) = {}", self.name, self.ticker, self.rate)
+        }
     }
 }

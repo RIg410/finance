@@ -14,7 +14,7 @@ pub enum Cli {
 }
 
 impl Cli {
-    pub async fn handle(&self, service: &FinanceService) -> Result<(), Error> {
+    pub async fn handle(self, service: &FinanceService) -> Result<(), Error> {
         match self {
             Cli::Currency(currency) => currency.handle(service).await,
         }

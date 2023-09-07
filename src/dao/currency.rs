@@ -1,6 +1,7 @@
 use crate::dao::model::currency::{Currency, CurrencyRate};
 use crate::service::decimal::Decimal;
 use color_eyre::eyre::Error;
+use log::debug;
 use sqlx::{Pool, Sqlite};
 
 pub struct CurrencyDao {
@@ -26,7 +27,7 @@ impl CurrencyDao {
         Ok(currency)
     }
 
-    pub async fn find_by_ticker(&self, ticker: String) -> Result<Currency, Error> {
+    pub async fn find_by_ticker(&self, ticker: &String) -> Result<Currency, Error> {
         let currency = sqlx::query_as!(Currency, "SELECT * FROM currency WHERE ticker = ?", ticker)
             .fetch_one(&self.pool)
             .await?;
@@ -43,10 +44,13 @@ impl CurrencyDao {
         .execute(&mut *conn)
         .await?
         .last_insert_rowid();
+        debug!("currency created: {}", id);
         Ok(Currency { id, name, ticker })
     }
 
-    pub async fn drop(&self, id: i64) -> Result<(), Error> {
+    pub async fn drop(&self, currency: &Currency) -> Result<(), Error> {
+        debug!("drop currency: {:?}", currency.id);
+        let id = currency.id;
         sqlx::query!("DELETE FROM currency WHERE id = ?", id)
             .execute(&self.pool)
             .await?;

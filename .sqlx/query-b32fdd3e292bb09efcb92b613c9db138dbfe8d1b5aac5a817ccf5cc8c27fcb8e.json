@@ -1,0 +1,38 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM currency_rate WHERE currency_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Int64"
+      },
+      {
+        "name": "currency_id",
+        "ordinal": 1,
+        "type_info": "Int64"
+      },
+      {
+        "name": "rate",
+        "ordinal": 2,
+        "type_info": "Int64"
+      },
+      {
+        "name": "date",
+        "ordinal": 3,
+        "type_info": "Datetime"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "b32fdd3e292bb09efcb92b613c9db138dbfe8d1b5aac5a817ccf5cc8c27fcb8e"
+}

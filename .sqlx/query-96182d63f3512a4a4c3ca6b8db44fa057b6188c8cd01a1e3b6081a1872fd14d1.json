@@ -1,0 +1,38 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM currency_rate WHERE currency_id = ? LIMIT ? OFFSET ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Int64"
+      },
+      {
+        "name": "currency_id",
+        "ordinal": 1,
+        "type_info": "Int64"
+      },
+      {
+        "name": "rate",
+        "ordinal": 2,
+        "type_info": "Int64"
+      },
+      {
+        "name": "date",
+        "ordinal": 3,
+        "type_info": "Datetime"
+      }
+    ],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "96182d63f3512a4a4c3ca6b8db44fa057b6188c8cd01a1e3b6081a1872fd14d1"
+}

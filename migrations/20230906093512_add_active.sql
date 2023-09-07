@@ -22,5 +22,5 @@ CREATE TABLE IF NOT EXISTS asset_operations (
     operation_type   TEXT            NOT NULL,
     operation_date   TIMESTAMP       NOT NULL,
     operation_amount INTEGER         NOT NULL,
-    FOREIGN KEY (asset_id) REFERENCES asset (id)
+    FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

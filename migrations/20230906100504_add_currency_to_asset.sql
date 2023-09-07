@@ -1,3 +1,3 @@
 -- Add migration script here
-ALTER TABLE asset ADD currency INTEGER NOT NULL REFERENCES currency(id);
-ALTER TABLE asset_operations ADD currency_rate INTEGER NOT NULL REFERENCES currency_rate(id);
+ALTER TABLE asset ADD currency INTEGER NOT NULL REFERENCES currency(id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE asset_operations ADD currency_rate INTEGER NOT NULL REFERENCES currency_rate(id) ON DELETE CASCADE ON UPDATE CASCADE;

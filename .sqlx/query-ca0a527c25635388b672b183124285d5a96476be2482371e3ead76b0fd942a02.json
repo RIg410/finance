@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO currency_rate (currency_id, rate, date) VALUES (?, ?, datetime('now'))",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "ca0a527c25635388b672b183124285d5a96476be2482371e3ead76b0fd942a02"
+}

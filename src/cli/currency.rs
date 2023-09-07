@@ -32,13 +32,13 @@ pub enum CurrencyCommand {
 }
 
 impl CurrencyCommand {
-    pub async fn handle(&self, service: &FinanceService) -> Result<(), Error> {
+    pub async fn handle(self, service: &FinanceService) -> Result<(), Error> {
         match self {
             CurrencyCommand::List => {
-                let currencies = service.currency.currency_info_list().await?;
+                let currencies = service.currency_info_list().await?;
                 println!(
                     "Currencies: name: ticker rate to the {}",
-                    service.currency.base_currency().await?.name
+                    service.base_currency().await?.name
                 );
                 for currency in currencies {
                     println!("{}", currency);
@@ -49,20 +49,31 @@ impl CurrencyCommand {
                 ticker,
                 rate_to_base,
             } => {
-                let rate = Decimal::from_str(rate_to_base)?;
                 let currency = service
-                    .currency
-                    .create(name.clone(), ticker.clone())
+                    .create_currency(
+                        name,
+                        ticker.to_ascii_lowercase(),
+                        Decimal::from_str(&rate_to_base)?,
+                    )
                     .await?;
-                service.currency.add_rate(&currency, rate).await?;
+                println!("Currency {} added", currency.name);
             }
             CurrencyCommand::Remove { ticker } => {
-                
+                service
+                    .remove_currency(&ticker.to_ascii_lowercase())
+                    .await?;
+                println!("Currency {} removed", ticker);
             }
-            CurrencyCommand::AddRate { ticker, rate_to_base } => {
-                let rate = Decimal::from_str(rate_to_base)?;
-
-                
+            CurrencyCommand::AddRate {
+                ticker,
+                rate_to_base,
+            } => {
+                service
+                    .add_currency_rate(
+                        ticker.to_ascii_lowercase(),
+                        Decimal::from_str(&rate_to_base)?,
+                    )
+                    .await?;
             }
         }
         Ok(())
