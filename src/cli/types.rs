@@ -28,22 +28,28 @@ impl TypesCommand {
                 Ok(())
             }
             TypesCommand::Add { name, description } => {
-                service.add_type(name, description).await?;
+                service
+                    .add_type(name.to_ascii_lowercase(), description)
+                    .await?;
                 println!("Type added");
                 Ok(())
             }
             TypesCommand::Remove { id } => {
-                service.remove_type(id).await?;
+                service.remove_type(id.to_ascii_lowercase()).await?;
                 println!("Type removed");
                 Ok(())
             }
             TypesCommand::Apply { asset, asset_type } => {
-                service.add_asset_type(asset, asset_type).await?;
+                service
+                    .add_asset_type(asset.to_ascii_lowercase(), asset_type)
+                    .await?;
                 println!("Type applied");
                 Ok(())
             }
             TypesCommand::RemoveFrom { asset, asset_type } => {
-                service.remove_asset_type(asset, asset_type).await?;
+                service
+                    .remove_asset_type(asset.to_ascii_lowercase(), asset_type.to_ascii_lowercase())
+                    .await?;
                 println!("Type removed");
                 Ok(())
             }

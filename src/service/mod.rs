@@ -159,4 +159,14 @@ impl FinanceService {
             .await?;
         Ok(asset)
     }
+
+    pub async fn remove_asset(&self, ticker: String) -> Result<(), Error> {
+        let asset = self
+            .assets
+            .get_asset_by_ticker(ticker.clone())
+            .await?
+            .ok_or(Error::msg("Asset not found"))?;
+        self.assets.remove_asset(&asset).await?;
+        Ok(())
+    }
 }

@@ -15,6 +15,9 @@ pub enum AssetsCommand {
         description: Option<String>,
         currency: String,
     },
+    Remove {
+        ticker: String,
+    },
 }
 
 impl AssetsCommand {
@@ -35,9 +38,19 @@ impl AssetsCommand {
                 currency,
             } => {
                 service
-                    .add_asset(ticker, name, description, currency)
+                    .add_asset(
+                        ticker.to_ascii_lowercase(),
+                        name,
+                        description,
+                        currency.to_ascii_lowercase(),
+                    )
                     .await?;
                 println!("Asset added");
+                Ok(())
+            }
+            AssetsCommand::Remove { ticker } => {
+                service.remove_asset(ticker.to_ascii_lowercase()).await?;
+                println!("Asset removed");
                 Ok(())
             }
         }
