@@ -14,11 +14,11 @@ impl CurrencyService {
     }
 
     pub async fn base_currency(&self) -> Result<Currency, Error> {
-        Ok(self
+        self
             .dao
             .get(1)
             .await?
-            .ok_or(Error::msg("Base currency not found"))?)
+            .ok_or(Error::msg("Base currency not found"))
     }
 
     pub async fn currency_info(&self, ticker: &String) -> Result<CurrencyShortInfo, Error> {
@@ -41,11 +41,11 @@ impl CurrencyService {
     }
 
     pub async fn currency(&self, ticker: &String) -> Result<Option<Currency>, Error> {
-        Ok(self.dao.find_by_ticker(ticker).await?)
+        self.dao.find_by_ticker(ticker).await
     }
 
     pub async fn currency_by_id(&self, id: i64) -> Result<Option<Currency>, Error> {
-        Ok(self.dao.get(id).await?)
+        self.dao.get(id).await
     }
 
     pub async fn drop(&self, currency: &Currency) -> Result<(), Error> {
@@ -68,7 +68,7 @@ impl CurrencyService {
     }
 
     pub async fn create(&self, name: String, ticker: String) -> Result<Currency, Error> {
-        Ok(self.dao.create(name, ticker).await?)
+        self.dao.create(name, ticker).await
     }
 
     pub async fn add_rate(&self, currency: &Currency, rate: Decimal) -> Result<(), Error> {

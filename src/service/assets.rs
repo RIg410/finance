@@ -99,6 +99,6 @@ impl AssetsService {
             return Err(Error::msg("Currency mismatch"));
         }
 
-        self.dao.add_operation(&asset, rate, tp, amount).await
+        self.dao.add_operation(asset, rate, tp, amount).await
     }
 }

@@ -36,9 +36,9 @@ impl From<&str> for OperationType {
     }
 }
 
-impl Into<String> for OperationType {
-    fn into(self) -> String {
-        match self {
+impl From<OperationType> for String {
+    fn from(val: OperationType) -> Self {
+        match val {
             OperationType::UpdatePrice => "UpdatePrice".to_string(),
             OperationType::Buy => "Buy".to_string(),
             OperationType::Sell => "Sell".to_string(),

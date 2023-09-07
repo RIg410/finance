@@ -40,9 +40,9 @@ impl From<i64> for Decimal {
     }
 }
 
-impl Into<i64> for Decimal {
-    fn into(self) -> i64 {
-        self.0
+impl From<Decimal> for i64 {
+    fn from(val: Decimal) -> Self {
+        val.0
     }
 }
 

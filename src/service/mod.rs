@@ -53,7 +53,7 @@ impl FinanceService {
             .await?
             .ok_or(Error::msg("Currency not found"))?;
         let assets = self.assets.find_assets_with_currency(&currency).await?;
-        if assets.len() > 0 {
+        if !assets.is_empty() {
             return Err(Error::msg("Currency has assets"));
         }
         self.currency.drop(&currency).await?;
