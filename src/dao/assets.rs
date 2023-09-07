@@ -1,5 +1,7 @@
 use crate::dao::model::assets::{Asset, AssetType};
-use crate::dao::model::currency::Currency;
+use crate::dao::model::currency::{Currency, CurrencyRate};
+use crate::dao::model::operations::OperationType;
+use crate::service::decimal::Decimal;
 use color_eyre::eyre::Error;
 use sqlx::{Pool, Sqlite};
 
@@ -169,6 +171,29 @@ impl AssetsDao {
     pub async fn remove_asset(&self, asset: &Asset) -> Result<(), Error> {
         let id = asset.id;
         sqlx::query!("DELETE FROM asset WHERE id = ?", id)
+            .execute(&self.pool)
+            .await?;
+        Ok(())
+    }
+
+    pub async fn add_operation(
+        &self,
+        asset: &Asset,
+        asset_rate: &CurrencyRate,
+        operation_type: OperationType,
+        operation_amount: Decimal,
+    ) -> Result<(), Error> {
+        let asset_id = asset.id;
+        let operation_type: String = operation_type.into();
+        let currency_rate = asset_rate.id;
+        let operation_amount: i64 = operation_amount.into();
+        sqlx::query!(
+            "INSERT INTO asset_operations (asset_id, operation_type, operation_date, operation_amount, currency_rate) VALUES (?, ?, datetime('now'), ?, ?)",
+            asset_id,
+            operation_type,
+            operation_amount,
+            currency_rate
+        )
             .execute(&self.pool)
             .await?;
         Ok(())

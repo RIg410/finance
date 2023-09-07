@@ -1,9 +1,9 @@
 use crate::dao::assets::AssetsDao;
 use crate::dao::currency::CurrencyDao;
 use crate::dao::model::assets::Asset;
-use crate::dao::model::currency::Currency;
+use crate::dao::model::currency::{Currency};
+use crate::dao::model::operations::OperationType;
 use crate::service::decimal::Decimal;
-use crate::service::operations::OperationService;
 use crate::view::assets::AssetShortInfo;
 use crate::view::currency::CurrencyShortInfo;
 use crate::view::types::TypeView;
@@ -13,12 +13,10 @@ use sqlx::{Pool, Sqlite};
 pub mod assets;
 pub mod currency;
 pub mod decimal;
-pub mod operations;
 
 pub struct FinanceService {
     pub currency: currency::CurrencyService,
     pub assets: assets::AssetsService,
-    pub operations: OperationService,
 }
 
 impl FinanceService {
@@ -26,7 +24,6 @@ impl FinanceService {
         Self {
             currency: currency::CurrencyService::new(CurrencyDao::new(pool.clone())),
             assets: assets::AssetsService::new(AssetsDao::new(pool)),
-            operations: OperationService::new(),
         }
     }
 
@@ -166,6 +163,31 @@ impl FinanceService {
 
     pub async fn remove_asset(&self, ticker: String) -> Result<(), Error> {
         self.assets.remove_asset(ticker).await?;
+        Ok(())
+    }
+
+    pub async fn add_operation(
+        &self,
+        asset: String,
+        amount: Decimal,
+        tp: OperationType,
+    ) -> Result<(), Error> {
+        let asset = self
+            .assets
+            .get_asset_by_ticker(asset)
+            .await?
+            .ok_or(Error::msg("Asset not found"))?;
+        let currency = self
+            .currency
+            .currency_by_id(asset.currency)
+            .await?
+            .ok_or(Error::msg("Currency not found for asset"))?;
+        let rate = self
+            .currency
+            .last_rate(&currency)
+            .await?
+            .ok_or(Error::msg("Currency rate not found for asset currency"))?;
+        self.assets.add_operation(&asset, &rate, tp, amount).await?;
         Ok(())
     }
 }

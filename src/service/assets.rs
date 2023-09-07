@@ -1,6 +1,8 @@
 use crate::dao::assets::AssetsDao;
 use crate::dao::model::assets::{Asset, AssetType};
-use crate::dao::model::currency::Currency;
+use crate::dao::model::currency::{Currency, CurrencyRate};
+use crate::dao::model::operations::OperationType;
+use crate::service::decimal::Decimal;
 use color_eyre::eyre::Error;
 
 pub struct AssetsService {
@@ -84,5 +86,19 @@ impl AssetsService {
             .await?
             .ok_or(Error::msg("Asset not found"))?;
         self.dao.remove_asset(&asset).await
+    }
+
+    pub async fn add_operation(
+        &self,
+        asset: &Asset,
+        rate: &CurrencyRate,
+        tp: OperationType,
+        amount: Decimal,
+    ) -> Result<(), Error> {
+        if rate.currency_id != asset.currency {
+            return Err(Error::msg("Currency mismatch"));
+        }
+
+        self.dao.add_operation(&asset, rate, tp, amount).await
     }
 }

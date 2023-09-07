@@ -7,7 +7,6 @@ pub struct Currency {
     pub ticker: String,
 }
 
-#[derive(sqlx::FromRow)]
 pub struct CurrencyRate {
     pub id: i64,
     pub currency_id: i64,

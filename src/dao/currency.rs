@@ -20,9 +20,9 @@ impl CurrencyDao {
         Ok(currency)
     }
 
-    pub async fn get(&self, id: i64) -> Result<Currency, Error> {
+    pub async fn get(&self, id: i64) -> Result<Option<Currency>, Error> {
         let currency = sqlx::query_as!(Currency, "SELECT * FROM currency WHERE id = ?", id)
-            .fetch_one(&self.pool)
+            .fetch_optional(&self.pool)
             .await?;
         Ok(currency)
     }
