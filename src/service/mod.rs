@@ -1,7 +1,7 @@
 use crate::dao::assets::AssetsDao;
 use crate::dao::currency::CurrencyDao;
 use crate::dao::model::assets::Asset;
-use crate::dao::model::currency::{Currency};
+use crate::dao::model::currency::Currency;
 use crate::dao::model::operations::OperationType;
 use crate::service::decimal::Decimal;
 use crate::view::assets::AssetShortInfo;
@@ -13,6 +13,7 @@ use sqlx::{Pool, Sqlite};
 pub mod assets;
 pub mod currency;
 pub mod decimal;
+pub mod statistics;
 
 pub struct FinanceService {
     pub currency: currency::CurrencyService,

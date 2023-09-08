@@ -14,6 +14,10 @@ impl Decimal {
     }
 }
 
+pub fn dec(val: &str) -> Decimal {
+    Decimal::from_str(val).unwrap()
+}
+
 impl FromStr for Decimal {
     type Err = Error;
 
