@@ -1,15 +1,30 @@
-[package]
+[workspace.package]
+edition = "2021"
 name = "finance"
 version = "0.1.0"
-edition = "2021"
 
-[dependencies]
-tokio = { version = "1.32.0", features = [ "full" ] }
-sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite", "chrono", "json", "macros"] }
+[workspace]
+members = [
+  "core",
+  "front",
+  "web",
+  "runner",
+]
+
+[workspace.dependencies]
+axum = {version = "0.6.20"}
+chrono = {version = "0.4.19", features = ["serde"]}
+clap = {version = "4.3.21", features = ["derive"]}
 color-eyre = "0.6.2"
-log = "0.4.14"
+dotenv = "0.15.0"
 env_logger = "0.10.0"
-clap = {version = "4.3.21", features = ["derive"] }
-serde = { version = "1.0.130", features = ["derive"] }
+log = "0.4.14"
+serde = {version = "1.0.130", features = ["derive"]}
 serde_json = "1.0.68"
-chrono = { version = "0.4.19", features = ["serde"] }
+sqlx = {version = "0.7", features = ["runtime-tokio", "sqlite", "chrono", "json", "macros"]}
+tokio = {version = "1.32.0", features = ["full"]}
+tower = {version = "0.4", features = ["util", "timeout"]}
+tower-http = {version = "0.4.0", features = ["add-extension", "trace"]}
+tracing = "0.1"
+tracing-subscriber = {version = "0.3", features = ["env-filter"]}
+uuid = {version = "1.0", features = ["serde", "v4"]}
